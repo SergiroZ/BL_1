@@ -58,17 +58,16 @@ namespace BL_1
             {
                 var au = db.Books.OrderBy((x) => x.Title).ToList();
                 IList<String> books = new List<String>();
-                int nom = 0, len = 0;
+                int nom = 0;
                 foreach (var a in au)
                 {
                     string s = (++nom).ToString() + ". " + a.Title + " : " +
                     a.Author.FirstName + " " + a.Author.LastName + "  [" + a.Publisher.PublisherName +
                     " " + a.Publisher.Address + "]; Price: " + a.Price + ", pages: " + a.Pages;
-                    len = (s.Length > len) ? s.Length : len;
                     books.Add(s);
                 }
                 dataGridView1.DataSource = books.Select(selector: x => new { Books = x }).ToList();
-                dataGridView1.Columns["Books"].Width = len * 5;
+                dataGridView1.Columns["Books"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
         }
 
