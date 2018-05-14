@@ -16,7 +16,60 @@ namespace BL_1
         {
             InitializeComponent();
 
-            GetAllBooks();
+            GetAllBooks1();
+        }
+
+        private void AddPublisher(Publisher publisher)
+        {
+            using (LibraryEntities db = new LibraryEntities())
+            {
+                Publisher a = db.Publishers.Where((x) =>
+                x.PublisherName == publisher.
+                PublisherName).FirstOrDefault();
+                if (a == null)
+                {
+                    db.Publishers.Add(publisher);
+                    db.SaveChanges();
+                    MessageBox.Show("New publisher added: " + publisher.PublisherName);
+                }
+            }
+        }
+
+        private void AddBook(Book book)
+        {
+            using (LibraryEntities db = new LibraryEntities())
+            {
+                Book a = db.Books.Where((x) => x.Title ==
+                book.Title).FirstOrDefault();
+                if (a == null)
+                {
+                    db.Books.Add(book);
+                    db.SaveChanges();
+                    MessageBox.Show("New book added:" + book.Title);
+                }
+            }
+        }
+
+        //private DataGridView songsDataGridView = new DataGridView();
+
+        private void GetAllBooks1()
+        {
+            using (LibraryEntities db = new LibraryEntities())
+            {
+                var au = db.Books.OrderBy((x) => x.Title).ToList();
+                IList<String> books = new List<String>();
+                int nom = 0, len = 0;
+                foreach (var a in au)
+                {
+                    string s = (++nom).ToString() + ". " + a.Title + " : " +
+                    a.Author.FirstName + " " + a.Author.LastName + "  [" + a.Publisher.PublisherName +
+                    " " + a.Publisher.Address + "]; Price: " + a.Price + ", pages: " + a.Pages;
+                    len = (s.Length > len) ? s.Length : len;
+                    books.Add(s);
+                }
+                dataGridView1.DataSource = books.Select(selector: x => new { Books = x }).ToList();
+                dataGridView1.Columns["Books"].Width = len * 5;
+            }
         }
 
         private void GetAllBooks()
