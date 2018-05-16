@@ -39,6 +39,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btSave = new System.Windows.Forms.Button();
+            this.btCancel = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,6 +58,7 @@
             this.comboBoxAuthor.Name = "comboBoxAuthor";
             this.comboBoxAuthor.Size = new System.Drawing.Size(396, 21);
             this.comboBoxAuthor.TabIndex = 1;
+            this.comboBoxAuthor.SelectedIndexChanged += new System.EventHandler(this.comboBoxAuthor_SelectedIndexChanged);
             // 
             // textBoxPrice
             // 
@@ -78,6 +81,7 @@
             this.comboBoxPublisher.Name = "comboBoxPublisher";
             this.comboBoxPublisher.Size = new System.Drawing.Size(447, 21);
             this.comboBoxPublisher.TabIndex = 4;
+            this.comboBoxPublisher.SelectedIndexChanged += new System.EventHandler(this.comboBoxPublisher_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -144,12 +148,36 @@
             this.panel1.Size = new System.Drawing.Size(463, 75);
             this.panel1.TabIndex = 10;
             // 
+            // btSave
+            // 
+            this.btSave.BackColor = System.Drawing.Color.RosyBrown;
+            this.btSave.Location = new System.Drawing.Point(143, 160);
+            this.btSave.Name = "btSave";
+            this.btSave.Size = new System.Drawing.Size(82, 24);
+            this.btSave.TabIndex = 11;
+            this.btSave.Text = "Save";
+            this.btSave.UseVisualStyleBackColor = false;
+            this.btSave.Click += new System.EventHandler(this.btSave_Click);
+            // 
+            // btCancel
+            // 
+            this.btCancel.BackColor = System.Drawing.Color.RosyBrown;
+            this.btCancel.Location = new System.Drawing.Point(248, 160);
+            this.btCancel.Name = "btCancel";
+            this.btCancel.Size = new System.Drawing.Size(82, 24);
+            this.btCancel.TabIndex = 12;
+            this.btCancel.Text = "Cancel";
+            this.btCancel.UseVisualStyleBackColor = false;
+            this.btCancel.Click += new System.EventHandler(this.btCancel_Click);
+            // 
             // EditBook
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.BurlyWood;
-            this.ClientSize = new System.Drawing.Size(492, 160);
+            this.ClientSize = new System.Drawing.Size(492, 194);
+            this.Controls.Add(this.btCancel);
+            this.Controls.Add(this.btSave);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -181,5 +209,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btSave;
+        private System.Windows.Forms.Button btCancel;
     }
 }

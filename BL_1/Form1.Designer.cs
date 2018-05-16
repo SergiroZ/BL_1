@@ -267,7 +267,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.BindingNavigator bookBindingNavigator;
         private System.Windows.Forms.ToolStripButton bindingNavigatorAddNewItem;

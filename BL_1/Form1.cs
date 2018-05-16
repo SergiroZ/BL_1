@@ -13,15 +13,16 @@ namespace BL_1
     public partial class Form1 : Form
     {
         private BindingSource bookBindingSource = new BindingSource();
+        private IList<String> books = new List<String>();
+        public DataGridView dataGridView1;
 
         public Form1()
         {
             InitializeComponent();
-
             GetAllBooks1();
         }
 
-        private void AddPublisher(Publisher publisher)
+        public void AddPublisher(Publisher publisher)
         {
             using (LibraryEntities db = new LibraryEntities())
             {
@@ -37,7 +38,7 @@ namespace BL_1
             }
         }
 
-        private void AddBook(Book book)
+        public bool AddBook(Book book)
         {
             using (LibraryEntities db = new LibraryEntities())
             {
@@ -47,19 +48,22 @@ namespace BL_1
                 {
                     db.Books.Add(book);
                     db.SaveChanges();
-                    MessageBox.Show("New book added:" + book.Title);
+                    MessageBox.Show(" New book added:  " + book.Title);
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
         }
-
-        //private DataGridView songsDataGridView = new DataGridView();
 
         private void GetAllBooks1()
         {
             using (LibraryEntities db = new LibraryEntities())
             {
                 var au = db.Books.OrderBy((x) => x.Title).ToList();
-                IList<String> books = new List<String>();
+
                 int nom = 0;
                 foreach (var a in au)
                 {
@@ -82,11 +86,11 @@ namespace BL_1
 
                 // Set the DataSource to the DataSet
                 // Set DataSource of BindingSource to table
-
                 bookBindingNavigator.BindingSource = bookBindingSource;
                 bookBindingSource.DataSource = dt;
                 dataGridView1.DataSource = bookBindingSource;
 
+                dataGridView1.AllowUserToAddRows = false;
                 dataGridView1.Columns["Books"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
         }
