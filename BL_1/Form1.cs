@@ -15,6 +15,8 @@ namespace BL_1
         private BindingSource bookBindingSource = new BindingSource();
         private IList<String> books = new List<String>();
         public DataGridView dataGridView1;
+        public String addNewBook = "";
+        private DataTable dt = new DataTable();
 
         public Form1()
         {
@@ -75,7 +77,6 @@ namespace BL_1
 
                 //dataGridView1.DataSource = books.Select(selector: x => new { Books = x }).ToList();
 
-                DataTable dt = new DataTable();
                 dt.Columns.Add("Books");
                 foreach (var item in books)
                 {
@@ -89,9 +90,6 @@ namespace BL_1
                 bookBindingNavigator.BindingSource = bookBindingSource;
                 bookBindingSource.DataSource = dt;
                 dataGridView1.DataSource = bookBindingSource;
-
-                dataGridView1.AllowUserToAddRows = false;
-                dataGridView1.Columns["Books"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
         }
 
@@ -147,10 +145,17 @@ namespace BL_1
             };
 
             newBook.ShowDialog();
+            dataGridView1.Rows.RemoveAt(dataGridView1.Rows.Count - 1);
+
+            DataRow newRow = dt.NewRow();
+            newRow["Books"] = addNewBook;
+            dt.Rows.Add(newRow);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.Columns["Books"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
         private void bookBindingNavigator_RefreshItems(object sender, EventArgs e)

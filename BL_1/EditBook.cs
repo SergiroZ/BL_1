@@ -61,6 +61,7 @@ namespace BL_1
         {
             if (Owner is Form1 main)
             {
+                //removes an empty string at the end of the datagridview
                 main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
             }
             Close();
@@ -80,7 +81,13 @@ namespace BL_1
             {
                 if (!main.AddBook(newBook))
                 {
+                    //removes an empty string at the end of the datagridview
                     main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
+                }
+                else
+                {
+                    main.addNewBook = newBook.Title + " : " + keyAuthor +
+                    "  [" + keyPublisher + "]; Price: " + newBook.Price + ", pages: " + newBook.Pages;
                 }
             }
             Close();
