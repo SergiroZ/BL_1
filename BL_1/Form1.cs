@@ -12,6 +12,8 @@ namespace BL_1
 {
     public partial class Form1 : Form
     {
+        private BindingSource bookBindingSource = new BindingSource();
+
         public Form1()
         {
             InitializeComponent();
@@ -66,7 +68,25 @@ namespace BL_1
                     " " + a.Publisher.Address + "]; Price: " + a.Price + ", pages: " + a.Pages;
                     books.Add(s);
                 }
-                dataGridView1.DataSource = books.Select(selector: x => new { Books = x }).ToList();
+
+                //dataGridView1.DataSource = books.Select(selector: x => new { Books = x }).ToList();
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Books");
+                foreach (var item in books)
+                {
+                    var row = dt.NewRow();
+                    row["Books"] = item;
+                    dt.Rows.Add(row);
+                }
+
+                // Set the DataSource to the DataSet
+                // Set DataSource of BindingSource to table
+
+                bookBindingNavigator.BindingSource = bookBindingSource;
+                bookBindingSource.DataSource = dt;
+                dataGridView1.DataSource = bookBindingSource;
+
                 dataGridView1.Columns["Books"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
         }
@@ -105,6 +125,32 @@ namespace BL_1
             //{
             //    //throw;
             //}
+        }
+
+        private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void bindingBindingNavigatorSaveItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
+        {
+            EditBook newBook = new EditBook
+            {
+                Owner = this
+            };
+
+            newBook.ShowDialog();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+        }
+
+        private void bookBindingNavigator_RefreshItems(object sender, EventArgs e)
+        {
         }
     }
 }
