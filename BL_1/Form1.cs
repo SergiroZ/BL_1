@@ -13,10 +13,15 @@ namespace BL_1
     public partial class Form1 : Form
     {
         private BindingSource bookBindingSource = new BindingSource();
+
         private IList<String> books = new List<String>();
+        private Dictionary<String, int> dBook = new Dictionary<String, int>();
+
         public DataGridView dataGridView1;
         public String addNewBook = "";
         private DataTable dt = new DataTable();
+        public bool isAdd = true;
+        public int idBookSender;
 
         public Form1()
         {
@@ -65,20 +70,21 @@ namespace BL_1
             using (LibraryEntities db = new LibraryEntities())
             {
                 var au = db.Books.OrderBy((x) => x.Title).ToList();
+                idBookSender = au.First().Id;
 
-                int nom = 0;
                 foreach (var a in au)
                 {
-                    string s = (++nom).ToString() + ". " + a.Title + " : " +
-                    a.Author.FirstName + " " + a.Author.LastName + "  [" + a.Publisher.PublisherName +
-                    " " + a.Publisher.Address + "]; Price: " + a.Price + ", pages: " + a.Pages;
-                    books.Add(s);
+                    string s = a.Title + " : " + a.Author.FirstName + " " +
+                        a.Author.LastName + "  [" + a.Publisher.PublisherName +
+                        " " + a.Publisher.Address + "]; Price: " + a.Price +
+                        ", pages: " + a.Pages;
+                    dBook.Add(s, a.Id);
                 }
 
                 //dataGridView1.DataSource = books.Select(selector: x => new { Books = x }).ToList();
 
                 dt.Columns.Add("Books");
-                foreach (var item in books)
+                foreach (var item in dBook.Keys)
                 {
                     var row = dt.NewRow();
                     row["Books"] = item;
@@ -144,7 +150,10 @@ namespace BL_1
                 Owner = this
             };
 
+            isAdd = true;
+
             newBook.ShowDialog();
+            //removes an empty string at the end of the datagridview
             dataGridView1.Rows.RemoveAt(dataGridView1.Rows.Count - 1);
 
             DataRow newRow = dt.NewRow();
@@ -158,8 +167,13 @@ namespace BL_1
             dataGridView1.Columns["Books"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
-        private void bookBindingNavigator_RefreshItems(object sender, EventArgs e)
+        private void bindingNavigatorEditItem_Click(object sender, EventArgs e)
         {
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            idBookSender = dBook[dataGridView1.CurrentRow.Cells[0].Value.ToString()];
         }
     }
 }
