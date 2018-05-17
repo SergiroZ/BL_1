@@ -18,9 +18,9 @@ namespace BL_1
         private Dictionary<String, int> dBook = new Dictionary<String, int>();
 
         public DataGridView dataGridView1;
-        public String addNewBook = "";
+        public String setNewBook = "";
         private DataTable dt = new DataTable();
-        public bool isAdd = true;
+        public bool isAdd = false;
         public int idBookSender;
 
         public Form1()
@@ -60,6 +60,44 @@ namespace BL_1
                 }
                 else
                 {
+                    MessageBox.Show(" Cancel the transaction.\n" +
+                        " A book with this name:\n" + book.Title +
+                        " already exists in the library.");
+                    return false;
+                }
+            }
+        }
+
+        public bool EdBook(Book book)
+        {
+            using (LibraryEntities db = new LibraryEntities())
+            {
+                int cnt = db.Books.Where((x) => x.Title ==
+                            book.Title).Count();
+                if (cnt <= 1)
+                {
+                    db.Books.Where((x) =>
+                        x.Id == idBookSender).Single().Title = book.Title;
+                    db.Books.Where((x) =>
+                        x.Id == idBookSender).Single().IdAuthor = book.IdAuthor;
+                    db.Books.Where((x) =>
+                        x.Id == idBookSender).Single().IdPublisher = book.IdPublisher;
+                    db.Books.Where((x) =>
+                        x.Id == idBookSender).Single().Pages = book.Pages;
+                    db.Books.Where((x) =>
+                        x.Id == idBookSender).Single().Price = book.Price;
+
+                    db.SaveChanges();
+                    MessageBox.Show(
+                        " The book with the name\n" + book.Title +
+                        "\n was successfully edited.");
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show(" Cancel the transaction.\n" +
+                        " A book with this name:\n" + book.Title +
+                        " already exists in the library.");
                     return false;
                 }
             }
@@ -99,6 +137,7 @@ namespace BL_1
             }
         }
 
+        // another way
         private void GetAllBooks()
         {
             using (var context = new LibraryEntities())
@@ -139,10 +178,6 @@ namespace BL_1
         {
         }
 
-        private void bindingBindingNavigatorSaveItem_Click(object sender, EventArgs e)
-        {
-        }
-
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
             EditBook newBook = new EditBook
@@ -153,22 +188,32 @@ namespace BL_1
             isAdd = true;
 
             newBook.ShowDialog();
-            //removes an empty string at the end of the datagridview
+            // removes an empty string at the end of the datagridview
             dataGridView1.Rows.RemoveAt(dataGridView1.Rows.Count - 1);
 
             DataRow newRow = dt.NewRow();
-            newRow["Books"] = addNewBook;
+            newRow["Books"] = setNewBook;
             dt.Rows.Add(newRow);
+        }
+
+        private void bindingNavigatorEditItem_Click(object sender, EventArgs e)
+        {
+            EditBook newBook = new EditBook
+            {
+                Owner = this
+            };
+
+            isAdd = false;
+
+            newBook.ShowDialog();
+
+            dt.Rows[dataGridView1.CurrentRow.Index]["Books"] = setNewBook;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.Columns["Books"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-        }
-
-        private void bindingNavigatorEditItem_Click(object sender, EventArgs e)
-        {
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)

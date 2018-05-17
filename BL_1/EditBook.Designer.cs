@@ -66,6 +66,8 @@
             this.textBoxPrice.Name = "textBoxPrice";
             this.textBoxPrice.Size = new System.Drawing.Size(62, 20);
             this.textBoxPrice.TabIndex = 2;
+            this.textBoxPrice.Text = "0";
+            this.textBoxPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // textBoxPages
             // 
@@ -73,6 +75,8 @@
             this.textBoxPages.Name = "textBoxPages";
             this.textBoxPages.Size = new System.Drawing.Size(62, 20);
             this.textBoxPages.TabIndex = 3;
+            this.textBoxPages.Text = "0";
+            this.textBoxPages.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // comboBoxPublisher
             // 

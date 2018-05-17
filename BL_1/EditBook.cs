@@ -76,6 +76,16 @@ namespace BL_1
                                select bk.Publisher.PublisherName + " :: " + bk.Publisher.Address).Single();
                 comboBoxPublisher.Text = sTransleted;
 
+                // for textBoxPrice
+                textBoxPrice.Text = (from bk in db.Books.ToList()
+                                     where bk.Id == senderIdBook
+                                     select bk.Price).Single().ToString();
+
+                // for textBoxPages
+                textBoxPages.Text = (from bk in db.Books.ToList()
+                                     where bk.Id == senderIdBook
+                                     select bk.Pages).Single().ToString();
+
                 if (localIsAdd)
                 {
                     textBoxTitle.Text = "unknown..";
@@ -89,8 +99,11 @@ namespace BL_1
         {
             if (Owner is Form1 main)
             {
-                // removes an empty string at the end of the datagridview
-                main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
+                if (main.isAdd)
+                {
+                    // removes an empty string at the end of the datagridview
+                    main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
+                }
             }
             Close();
         }
@@ -105,18 +118,38 @@ namespace BL_1
                 Pages = Convert.ToInt32(textBoxPages.Text),
                 Price = Convert.ToInt32(textBoxPrice.Text),
             };
+
             if (Owner is Form1 main)
             {
-                if (!main.AddBook(newBook))
+                if (main.isAdd)
                 {
-                    // removes an empty string at the end of the datagridview
-                    main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
+                    // if add row
+                    if (!main.AddBook(newBook))
+                    {
+                        // removes an empty string at the end of the datagridview
+                        main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
+                    }
+                    else
+                    {
+                        main.setNewBook = newBook.Title + " : " + keyAuthor +
+                        "  [" + keyPublisher + "]; Price: " + newBook.Price +
+                        ", pages: " + newBook.Pages;
+                    }
                 }
                 else
                 {
-                    main.addNewBook = newBook.Title + " : " + keyAuthor +
-                    "  [" + keyPublisher + "]; Price: " + newBook.Price +
-                    ", pages: " + newBook.Pages;
+                    // if edit row
+                    if (!main.EdBook(newBook))
+                    {
+                        // removes an empty string at the end of the datagridview
+                        main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
+                    }
+                    else
+                    {
+                        main.setNewBook = newBook.Title + " : " + keyAuthor +
+                        "  [" + keyPublisher + "]; Price: " + newBook.Price +
+                        ", pages: " + newBook.Pages;
+                    }
                 }
             }
             Close();
