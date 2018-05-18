@@ -162,21 +162,6 @@ namespace BL_1
             }
         }
 
-        private void dataGridView1_DataError(object sender, DataGridViewDataErrorEventArgs e)
-        {
-            //try
-            //{
-            //}
-            //catch (Exception)
-            //{
-            //    //throw;
-            //}
-        }
-
-        private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
-        {
-        }
-
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
             EditBook newBook = new EditBook
