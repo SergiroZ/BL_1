@@ -18,7 +18,7 @@ namespace BL_1
         private int valueAuthor, valuePublisher;
         private bool localIsAdd = true;
         private int senderIdBook;
-        private string sTransleted;
+        private string sTransmitter;
 
         public EditBook()
         {
@@ -53,11 +53,10 @@ namespace BL_1
                 comboBoxAuthor.DataSource = new BindingSource(dAuthor, null);
                 comboBoxAuthor.DisplayMember = "Key";
                 comboBoxAuthor.ValueMember = "Value";
-                sTransleted = (from bk in db.Books.ToList()
-                               where bk.Id == senderIdBook
-                               select bk.Author.FirstName + " " + bk.Author.LastName).Single();
-
-                comboBoxAuthor.Text = sTransleted;
+                sTransmitter = (from bk in db.Books.ToList()
+                                where bk.Id == senderIdBook
+                                select bk.Author.FirstName + " " + bk.Author.LastName).Single();
+                comboBoxAuthor.Text = sTransmitter;
                 // the same thing in another way
                 // comboBoxAuthor.SelectedIndex = comboBoxAuthor.FindString(sAut);
 
@@ -71,10 +70,10 @@ namespace BL_1
                 comboBoxPublisher.DataSource = new BindingSource(dPublisher, null);
                 comboBoxPublisher.DisplayMember = "Key";
                 comboBoxPublisher.ValueMember = "Value";
-                sTransleted = (from bk in db.Books.ToList()
-                               where bk.Id == senderIdBook
-                               select bk.Publisher.PublisherName + " :: " + bk.Publisher.Address).Single();
-                comboBoxPublisher.Text = sTransleted;
+                sTransmitter = (from bk in db.Books.ToList()
+                                where bk.Id == senderIdBook
+                                select bk.Publisher.PublisherName + " :: " + bk.Publisher.Address).Single();
+                comboBoxPublisher.Text = sTransmitter;
 
                 // for textBoxPrice
                 textBoxPrice.Text = (from bk in db.Books.ToList()
@@ -99,11 +98,7 @@ namespace BL_1
         {
             if (Owner is Form1 main)
             {
-                if (main.isAdd)
-                {
-                    // removes an empty string at the end of the datagridview
-                    main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
-                }
+                main.isAdd = false;
             }
             Close();
         }
@@ -121,13 +116,14 @@ namespace BL_1
 
             if (Owner is Form1 main)
             {
-                if (main.isAdd)
+                if (localIsAdd)
                 {
                     // if add row
                     if (!main.AddBook(newBook))
                     {
                         // removes an empty string at the end of the datagridview
-                        main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
+                        // main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
+                        main.isAdd = false;
                     }
                     else
                     {
@@ -143,6 +139,7 @@ namespace BL_1
                     {
                         // removes an empty string at the end of the datagridview
                         main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
+                        main.isAdd = false;
                     }
                     else
                     {

@@ -14,7 +14,6 @@ namespace BL_1
     {
         private BindingSource bookBindingSource = new BindingSource();
 
-        private IList<String> books = new List<String>();
         private Dictionary<String, int> dBook = new Dictionary<String, int>();
 
         public DataGridView dataGridView1;
@@ -190,10 +189,12 @@ namespace BL_1
             newBook.ShowDialog();
             // removes an empty string at the end of the datagridview
             dataGridView1.Rows.RemoveAt(dataGridView1.Rows.Count - 1);
-
-            DataRow newRow = dt.NewRow();
-            newRow["Books"] = setNewBook;
-            dt.Rows.Add(newRow);
+            if (isAdd)
+            {
+                DataRow newRow = dt.NewRow();
+                newRow["Books"] = setNewBook;
+                dt.Rows.Add(newRow);
+            }
         }
 
         private void bindingNavigatorEditItem_Click(object sender, EventArgs e)
@@ -214,11 +215,15 @@ namespace BL_1
         {
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.Columns["Books"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridView1.MultiSelect = false;
+            dataGridView1.ReadOnly = true;
+            setNewBook = dataGridView1.CurrentRow.Cells[0].Value.ToString();
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
         {
             idBookSender = dBook[dataGridView1.CurrentRow.Cells[0].Value.ToString()];
+            setNewBook = dataGridView1.CurrentRow.Cells[0].Value.ToString();
         }
     }
 }

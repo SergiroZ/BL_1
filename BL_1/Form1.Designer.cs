@@ -86,8 +86,8 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(816, 373);
             this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView1_DataError);
+            this.dataGridView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseClick);
             // 
             // tabPage2
             // 
@@ -249,6 +249,9 @@
             this.ClientSize = new System.Drawing.Size(851, 450);
             this.Controls.Add(this.bookBindingNavigator);
             this.Controls.Add(this.tabControl1);
+            this.Location = new System.Drawing.Point(50, 50);
+            this.MaximumSize = new System.Drawing.Size(867, 489);
+            this.MinimumSize = new System.Drawing.Size(867, 489);
             this.Name = "Form1";
             this.Text = "library";
             this.Load += new System.EventHandler(this.Form1_Load);

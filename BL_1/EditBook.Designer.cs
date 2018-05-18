@@ -53,6 +53,8 @@
             // 
             // comboBoxAuthor
             // 
+            this.comboBoxAuthor.BackColor = System.Drawing.Color.Linen;
+            this.comboBoxAuthor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAuthor.FormattingEnabled = true;
             this.comboBoxAuthor.Location = new System.Drawing.Point(75, 42);
             this.comboBoxAuthor.Name = "comboBoxAuthor";
@@ -80,6 +82,7 @@
             // 
             // comboBoxPublisher
             // 
+            this.comboBoxPublisher.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxPublisher.FormattingEnabled = true;
             this.comboBoxPublisher.Location = new System.Drawing.Point(6, 46);
             this.comboBoxPublisher.Name = "comboBoxPublisher";
