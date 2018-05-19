@@ -13,10 +13,12 @@ namespace BL_1
     public partial class Form1 : Form
     {
         private BindingSource bookBindingSource = new BindingSource();
+        private BindingSource authorBindingSource = new BindingSource();
+        private BindingSource publisherBindingSource = new BindingSource();
 
         private Dictionary<String, int> dBook = new Dictionary<String, int>();
 
-        public DataGridView dataGridView1;
+        public DataGridView dataGridViewBook;
         public String setNewBook = "";
         private DataTable dt = new DataTable();
         public bool isAdd = false;
@@ -25,10 +27,38 @@ namespace BL_1
         public Form1()
         {
             InitializeComponent();
-            GetAllBooks1();
+            GetAllBooks();
+            GetAllAuthors();
+            GetAllPublishers();
         }
 
-        public void AddPublisher(Publisher publisher)
+        public bool AddAuthor(Author author)
+        {
+            using (LibraryEntities db = new LibraryEntities())
+            {
+                Author a = db.Authors.Where((x) =>
+                x.FirstName + " " + x.LastName == author.
+                FirstName + " " + author.LastName).FirstOrDefault();
+                if (a == null)
+                {
+                    db.Authors.Add(author);
+                    db.SaveChanges();
+                    MessageBox.Show("New aythor added: "
+                        + author.LastName + " " + author.LastName);
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show(" Cancel the transaction.\n" +
+                        " A author with this name:\n" +
+                        author.LastName + " " + author.LastName +
+                        "/n already exists in the library.");
+                    return false;
+                }
+            }
+        }
+
+        public bool AddPublisher(Publisher publisher)
         {
             using (LibraryEntities db = new LibraryEntities())
             {
@@ -39,7 +69,17 @@ namespace BL_1
                 {
                     db.Publishers.Add(publisher);
                     db.SaveChanges();
-                    MessageBox.Show("New publisher added: " + publisher.PublisherName);
+                    MessageBox.Show("New publisher added: " +
+                        publisher.PublisherName);
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show(" Cancel the transaction.\n" +
+                        " A publisher with this name:\n" +
+                        publisher.PublisherName +
+                        "/n already exists in the library.");
+                    return false;
                 }
             }
         }
@@ -54,6 +94,7 @@ namespace BL_1
                 {
                     db.Books.Add(book);
                     db.SaveChanges();
+                    idBookSender = book.Id;
                     MessageBox.Show(" New book added:  " + book.Title);
                     return true;
                 }
@@ -61,7 +102,7 @@ namespace BL_1
                 {
                     MessageBox.Show(" Cancel the transaction.\n" +
                         " A book with this name:\n" + book.Title +
-                        " already exists in the library.");
+                        "/n already exists in the library.");
                     return false;
                 }
             }
@@ -102,7 +143,7 @@ namespace BL_1
             }
         }
 
-        private void GetAllBooks1()
+        private void GetAllBooks()
         {
             using (LibraryEntities db = new LibraryEntities())
             {
@@ -118,8 +159,6 @@ namespace BL_1
                     dBook.Add(s, a.Id);
                 }
 
-                //dataGridView1.DataSource = books.Select(selector: x => new { Books = x }).ToList();
-
                 dt.Columns.Add("Books");
                 foreach (var item in dBook.Keys)
                 {
@@ -132,33 +171,75 @@ namespace BL_1
                 // Set DataSource of BindingSource to table
                 bookBindingNavigator.BindingSource = bookBindingSource;
                 bookBindingSource.DataSource = dt;
-                dataGridView1.DataSource = bookBindingSource;
+                dataGridViewBook.DataSource = bookBindingSource;
             }
         }
 
         // another way
-        private void GetAllBooks()
+        //private void GetAllBooks1()
+        //{
+        //    using (var context = new LibraryEntities())
+        //    {
+        //        var query = from books in context.Books
+        //                    join author in context.Authors on books.IdAuthor equals author.Id
+        //                    join publisher in context.Publishers on books.IdPublisher equals publisher.Id
+        //                    select new
+        //                    {
+        //                        books.Id,
+        //                        aFName = author.FirstName,
+        //                        aLName = author.LastName,
+        //                        books.Title,
+        //                        books.Pages,
+        //                        books.Price,
+        //                        publisher.PublisherName,
+        //                        publisher.Address
+        //                    };
+        //        dataGridViewBook.DataSource = query.ToList();
+        //        dataGridViewBook.Columns["aFName"].HeaderText = "First name";
+        //        dataGridViewBook.Columns["aLName"].HeaderText = "Second name";
+        //        dataGridViewBook.Columns["PublisherName"].HeaderText = "Publisher name";
+        //    }
+        //}
+
+        private void GetAllAuthors()
         {
-            using (var context = new LibraryEntities())
+            using (LibraryEntities db = new LibraryEntities())
             {
-                var query = from books in context.Books
-                            join author in context.Authors on books.IdAuthor equals author.Id
-                            join publisher in context.Publishers on books.IdPublisher equals publisher.Id
-                            select new
-                            {
-                                books.Id,
-                                aFName = author.FirstName,
-                                aLName = author.LastName,
-                                books.Title,
-                                books.Pages,
-                                books.Price,
-                                publisher.PublisherName,
-                                publisher.Address
-                            };
-                dataGridView1.DataSource = query.ToList();
-                dataGridView1.Columns["aFName"].HeaderText = "First name";
-                dataGridView1.Columns["aLName"].HeaderText = "Second name";
-                dataGridView1.Columns["PublisherName"].HeaderText = "Publisher name";
+                var dtAuthor = db.Authors.Select(selector:
+                    x => new { x.FirstName, x.LastName }).ToList();
+
+                dataGridViewAuthors.DataSource = dtAuthor;
+                dataGridViewAuthors.Columns[0].HeaderText = "First Name";
+                dataGridViewAuthors.Columns[1].HeaderText = "Last Name";
+
+                // Set the DataSource to the DataSet
+                // Set DataSource of BindingSource to table
+                authorBindingNavigator.BindingSource = authorBindingSource;
+                authorBindingSource.DataSource = dtAuthor;
+                dataGridViewAuthors.DataSource = authorBindingSource;
+                dataGridViewAuthors.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridViewAuthors.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            }
+        }
+
+        private void GetAllPublishers()
+        {
+            using (LibraryEntities db = new LibraryEntities())
+            {
+                var dtPublisher = db.Publishers.Select(selector:
+                    x => new { x.PublisherName, x.Address }).ToList();
+                dataGridViewPublishers.DataSource = dtPublisher;
+
+                dataGridViewPublishers.Columns[0].HeaderText = "Name";
+                dataGridViewPublishers.Columns[1].HeaderText = "Address";
+
+                // Set the DataSource to the DataSet
+                // Set DataSource of BindingSource to table
+                publisherBindingNavigator.BindingSource = publisherBindingSource;
+                publisherBindingSource.DataSource = dtPublisher;
+                dataGridViewPublishers.DataSource = publisherBindingSource;
+                dataGridViewPublishers.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridViewPublishers.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
         }
 
@@ -173,12 +254,13 @@ namespace BL_1
 
             newBook.ShowDialog();
             // removes an empty string at the end of the datagridview
-            dataGridView1.Rows.RemoveAt(dataGridView1.Rows.Count - 1);
+            dataGridViewBook.Rows.RemoveAt(dataGridViewBook.Rows.Count - 1);
             if (isAdd)
             {
                 DataRow newRow = dt.NewRow();
                 newRow["Books"] = setNewBook;
                 dt.Rows.Add(newRow);
+                dBook.Add(setNewBook, idBookSender);
             }
         }
 
@@ -190,25 +272,57 @@ namespace BL_1
             };
 
             isAdd = false;
-
+            dBook.Remove(setNewBook);
             newBook.ShowDialog();
+            dBook.Add(setNewBook, idBookSender);
 
-            dt.Rows[dataGridView1.CurrentRow.Index]["Books"] = setNewBook;
+            dt.Rows[dataGridViewBook.CurrentRow.Index]["Books"] = setNewBook;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.Columns["Books"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridView1.MultiSelect = false;
-            dataGridView1.ReadOnly = true;
-            setNewBook = dataGridView1.CurrentRow.Cells[0].Value.ToString();
+            dataGridViewBook.AllowUserToAddRows = false;
+            dataGridViewBook.Columns["Books"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewBook.MultiSelect = false;
+            dataGridViewBook.ReadOnly = true;
+            setNewBook = dataGridViewBook.CurrentRow.Cells[0].Value.ToString();
+
+            authorBindingNavigator.Visible = false;
+            publisherBindingNavigator.Visible = false;
         }
 
-        private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
+        private void tabControl1_MouseDown(object sender, MouseEventArgs e)
         {
-            idBookSender = dBook[dataGridView1.CurrentRow.Cells[0].Value.ToString()];
-            setNewBook = dataGridView1.CurrentRow.Cells[0].Value.ToString();
+            int caseSwitch = tabControl1.SelectedIndex;
+            switch (caseSwitch)
+            {
+                case 0:
+                    bookBindingNavigator.Visible = true;
+                    authorBindingNavigator.Visible = false;
+                    publisherBindingNavigator.Visible = false;
+                    break;
+
+                case 1:
+                    bookBindingNavigator.Visible = false;
+                    authorBindingNavigator.Visible = true;
+                    publisherBindingNavigator.Visible = false;
+                    break;
+
+                case 2:
+                    bookBindingNavigator.Visible = false;
+                    authorBindingNavigator.Visible = false;
+                    publisherBindingNavigator.Visible = true;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void dataGridViewBook_MouseClick(object sender, MouseEventArgs e)
+        {
+            idBookSender = dBook[dataGridViewBook.CurrentRow.Cells[0].Value.ToString()];
+            setNewBook = dataGridViewBook.CurrentRow.Cells[0].Value.ToString();
         }
     }
 }

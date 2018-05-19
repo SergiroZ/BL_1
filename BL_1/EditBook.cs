@@ -12,7 +12,7 @@ namespace BL_1
 {
     public partial class EditBook : Form
     {
-        private Dictionary<String, int> dAuthor = new Dictionary<String, int>();
+        public Dictionary<String, int> dAuthor = new Dictionary<String, int>();
         private Dictionary<String, int> dPublisher = new Dictionary<String, int>();
         private string keyAuthor, keyPublisher;
         private int valueAuthor, valuePublisher;
@@ -138,7 +138,7 @@ namespace BL_1
                     if (!main.EdBook(newBook))
                     {
                         // removes an empty string at the end of the datagridview
-                        main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
+                        main.dataGridViewBook.Rows.RemoveAt(main.dataGridViewBook.Rows.Count - 1);
                         main.isAdd = false;
                     }
                     else
