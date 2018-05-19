@@ -102,7 +102,7 @@ namespace BL_1
                 {
                     MessageBox.Show(" Cancel the transaction.\n" +
                         " A book with this name:\n" + book.Title +
-                        "/n already exists in the library.");
+                        "\n already exists in the library.");
                     return false;
                 }
             }
@@ -112,9 +112,9 @@ namespace BL_1
         {
             using (LibraryEntities db = new LibraryEntities())
             {
-                int cnt = db.Books.Where((x) => x.Title ==
-                            book.Title).Count();
-                if (cnt <= 1)
+                Book b = db.Books.Where((x) => x.Title ==
+                            book.Title).FirstOrDefault();
+                if (b == null)
                 {
                     db.Books.Where((x) =>
                         x.Id == idBookSender).Single().Title = book.Title;
@@ -137,7 +137,7 @@ namespace BL_1
                 {
                     MessageBox.Show(" Cancel the transaction.\n" +
                         " A book with this name:\n" + book.Title +
-                        " already exists in the library.");
+                        "\n already exists in the library.");
                     return false;
                 }
             }

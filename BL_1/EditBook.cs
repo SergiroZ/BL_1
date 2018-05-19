@@ -121,8 +121,6 @@ namespace BL_1
                     // if add row
                     if (!main.AddBook(newBook))
                     {
-                        // removes an empty string at the end of the datagridview
-                        // main.dataGridView1.Rows.RemoveAt(main.dataGridView1.Rows.Count - 1);
                         main.isAdd = false;
                     }
                     else
@@ -137,8 +135,6 @@ namespace BL_1
                     // if edit row
                     if (!main.EdBook(newBook))
                     {
-                        // removes an empty string at the end of the datagridview
-                        main.dataGridViewBook.Rows.RemoveAt(main.dataGridViewBook.Rows.Count - 1);
                         main.isAdd = false;
                     }
                     else
